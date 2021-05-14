@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models.deletion import CASCADE
+from recipe.models import Recipe
 
 User = get_user_model()
 

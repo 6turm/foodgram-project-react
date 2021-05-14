@@ -21,13 +21,20 @@ class Product(models.Model):
 class Recipe(models.Model):
     author = models.ForeignKey(User, on_delete=CASCADE, related_name='author')
     title = models.CharField(max_length=225, verbose_name='Название')
-    image = models.ImageField(upload_to='/recipe')
+    image = models.ImageField(upload_to='/recipe', verbose_name='Изображение')
     description = models.TextField(verbose_name='Описание')
-    consist = models.ManyToManyField(Product, through='Ingredien')
-    tag = models.ManyToManyField(Tag, on_delete=SET_NULL, related_name='+')
+    consist = models.ManyToManyField(
+        Product, through='Ingredien', on_delete=SET_NULL, null=True,
+    )
+    tag = models.ManyToManyField(
+        Tag, on_delete=SET_NULL, null=True, related_name='recipes'
+    )
+    coocking_time = models.TimeField(validators=[])
+    pub_date = models.DurationField(verbose_name='Дата публикации')
+    slug = models.SlugField(verbose_name='Рецепт')
 
     class Meta:
-        ordering = []
+        ordering = ['-pub_date']
 
 
 class Ingredient(models.Model):
@@ -37,5 +44,5 @@ class Ingredient(models.Model):
     )
     amount = models.IntegerField()
 
-    def __str__(self):
-        pass
+    # def __str__(self):
+    #     return f'{self.product.title}, {self} {self.product.measure}'
