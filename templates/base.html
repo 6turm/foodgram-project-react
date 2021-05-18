@@ -12,13 +12,13 @@
     <body class="body">
         {% include 'includes/nav.html' %}
         <main class="main container">
-            {% block header %}<!-- Заголовок (если используется) -->{% endblock header %}
-            {% block content %}<!-- Основной контент -->{% endblock content %}
-            {% block paginator %}<!-- Пагинатор (если используется) -->{% endblock paginator %}
+            {% block header %}<!-- Заголовок (если используется) -->{% endblock %}
+            {% block content %}<!-- Основной контент -->{% endblock %}
+            {% block paginator %}<!-- Пагинатор (если используется) -->{% endblock %}
         </main>
         <footer class="footer">
             {% include 'includes/footer.html'}
         </footer>
-        {% block scripts %}<!-- CSS скрипты -->{% endblock scripts %}
+        {% block scripts %}<!-- CSS скрипты -->{% endblock %}
     </body>
 </html>
