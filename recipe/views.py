@@ -10,6 +10,6 @@ def index(request):
     page = paginator.get_page(page_number)
     return render(
         request,
-        index.html,
+        'index.html',
         {'page': page, 'paginator': paginator}
     )

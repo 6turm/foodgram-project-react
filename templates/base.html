@@ -7,7 +7,9 @@
             content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Рецепты</title>
-        <link rel="stylesheet" href="./pages/index.css">
+        {% block static %}
+        
+        {% endblock %}
     </head>
     <body class="body">
         {% include 'includes/nav.html' %}
@@ -17,7 +19,7 @@
             {% block paginator %}<!-- Пагинатор (если используется) -->{% endblock %}
         </main>
         <footer class="footer">
-            {% include 'includes/footer.html'}
+            {% include 'includes/footer.html' %}
         </footer>
         {% block scripts %}<!-- CSS скрипты -->{% endblock %}
     </body>
