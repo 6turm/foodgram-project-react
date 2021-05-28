@@ -1,13 +1,29 @@
+function getCookie(name) {
+  let coockieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1)); break;
+      }
+    }
+  }
+  return cookieValue
+}
+
 
 class Api {
     constructor(apiUrl) {
         this.apiUrl =  apiUrl;
+        this.headers = {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        }
     }
   getPurchases () {
-    return fetch(`/purchases`, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    return fetch(`/purchases/`, {
+      headers: this.headers
     })
       .then( e => {
           if(e.ok) {
@@ -17,11 +33,9 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(`/purchases`, {
+    return fetch(`/purchases/`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: this.headers,
       body: JSON.stringify({
         id: id
       })
@@ -34,11 +48,9 @@ class Api {
       })
   }
   removePurchases (id){
-    return fetch(`/purchases/${id}`, {
+    return fetch(`/purchases/${id}/`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: this.headers
     })
       .then( e => {
           if(e.ok) {
@@ -48,11 +60,9 @@ class Api {
       })
   }
   addSubscriptions(id) {
-    return fetch(`/subscriptions`, {
+    return fetch(`/subscriptions/`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: this.headers,
       body: JSON.stringify({
         id: id
       })
@@ -65,11 +75,9 @@ class Api {
       })
   }
   removeSubscriptions (id) {
-    return fetch(`/subscriptions/${id}`, {
+    return fetch(`/subscriptions/${id}/`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: this.headers
     })
       .then( e => {
           if(e.ok) {
@@ -79,11 +87,9 @@ class Api {
       })
   }
   addFavorites (id)  {
-    return fetch(`/favorites`, {
+    return fetch(`/api/favorites/`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: this.headers,
       body: JSON.stringify({
         id: id
       })
@@ -96,11 +102,9 @@ class Api {
         })
   }
   removeFavorites (id) {
-    return fetch(`/favorites/${id}`, {
+    return fetch(`/api/favorites/${id}/`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      headers: this.headers
     })
         .then( e => {
             if(e.ok) {
@@ -110,10 +114,8 @@ class Api {
         })
   }
     getIngredients  (text)  {
-        return fetch(`/ingredients?query=${text}`, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        return fetch(`/ingredients?query=${text}/`, {
+            headers: this.headers
         })
             .then( e => {
                 if(e.ok) {

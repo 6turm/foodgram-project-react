@@ -38,13 +38,16 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'recipe',
     'user',
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'sorl.thumbnail',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
