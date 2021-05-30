@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="{% static '/pages/form.css' %}">
 {% endblock %}
 
+{% block nav %}
+    {% include 'includes/nav.html' with active='login' %}
+{% endblock %}
+
 {% block main_header %}
     <div class="main__header">
         <h1 class="main__title">Войти на сайт</h1>
@@ -17,7 +21,7 @@
 {% block content %}
     {% load user_filters %}
     <div class="form-container">
-        <form method='post' action="{% url 'login' %}" class="form">
+        <form method='post' action="" class="form">
             {% csrf_token %}
             <div class="form__group">
                 <label for="id_username" class="form__label">Имя</label>

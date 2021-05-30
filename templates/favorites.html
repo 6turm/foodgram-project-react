@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    <title>Рецепты</title>
+    <title>Избранное</title>
 {% endblock %}
 
 {% block static %}
@@ -10,17 +10,15 @@
 {% endblock %}
 
 {% block nav %}
-    {% include 'includes/nav.html' with active='index' %}
+    {% include 'includes/nav.html' with active='favorites' %}
 {% endblock %}
-
 
 {% block  main_header %}
     <div class="main__header">
-        <h1 class="main__title">Рецепты</h1>
+        <h1 class="main__title">Избранное</h1>
         {% include 'includes/tags.html' %}
     </div>
 {% endblock %}
-
 
 {% block content %}
     <div class="card-list">
