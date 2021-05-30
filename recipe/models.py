@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.db.models.deletion import CASCADE, PROTECT
 from django.core.validators import MinValueValidator
+from django.db.models.expressions import Exists, OuterRef
 
 User = get_user_model()
 
@@ -29,6 +30,17 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+
+
+class RecipeQuerySet(models.QuerySet):
+    def annotate_favorites(self, user_id):
+        queryset = self.annotate(is_favorite=Exists(
+            Favorites.objects.filter(
+                    user_id=user_id,
+                    recipe_id=OuterRef('pk')
+            )
+        ))
+        return queryset
 
 
 class Recipe(models.Model):
@@ -71,6 +83,7 @@ class Recipe(models.Model):
     slug = models.SlugField(
         verbose_name='Короткая ссылка'
     )
+    objects = RecipeQuerySet.as_manager()
 
     def favorit_count(self, obj):
         return obj.favorites.count()

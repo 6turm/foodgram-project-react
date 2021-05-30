@@ -16,9 +16,10 @@
     </div>
 {% endblock %}
 
+<!-- <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li> -->
 {% block content %}
     <div class="card-list">
-        {% for recipe in page %}
+        {% for recipe in recipe_list %}
             {% include 'recipe/includes/recipe_item.html' with recipe=recipe %}
         {% endfor %}
     </div>
