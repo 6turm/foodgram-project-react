@@ -1,7 +1,7 @@
-from django.shortcuts import get_object_or_404, render
-from .models import Recipe, Favorites, User
-from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404
+from .models import Recipe, User
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -49,3 +49,9 @@ class ProfileView(ListView):
         author = get_object_or_404(User, username=self.kwargs.get('username'))
         context['author'] = author
         return context
+
+
+class RecipeDetailView(DetailView):
+    model = Recipe
+    template_name = 'recipe.html'
+    context_object_name = 'recipe'

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>{{ recipe.title}}</title>
+{% endblock %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'pages/single.css' %}">
+{% endblock %}
+
+{% block nav %}
+    {% include 'includes/nav.html' with active='index' %}
+{% endblock %}
+
+{% block content %}
+    {% include 'recipe/includes/recipe_detail.html' %}
+{% endblock %}
+
+
+{% block scripts %}
+    <script src="./js/components/Purchases.js"></script>
+    <script src="./js/components/Favorites.js"></script>
+    <script src="./js/components/Subscribe.js"></script>
+    <script src="./js/config/config.js"></script>
+
+    <script src="./js/components/MainCards.js"></script>
+    <script src="./js/components/SingleCard.js"></script>
+    <script src="./js/components/Header.js"></script>
+
+    <script src="./js/api/Api.js"></script>
+    <script src="singlePage.js"></script>
+{% endblock %}
