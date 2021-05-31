@@ -21,7 +21,7 @@
 {% block content %}
     {% load user_filters %}
     <div class="form-container">
-        <form method='post' action="" class="form">
+        <form method='post' action='' class="form">
             {% csrf_token %}
             <div class="form__group">
                 <label for="id_username" class="form__label">Имя</label>
@@ -36,7 +36,7 @@
                 <div class="form__field-group">
                     {{ form.password|addclass:'form__input' }}
                     <!-- <input type="password" name="password" id="id_password" class="form__input"> -->
-                    <span class="form__error">Имя пользователя и пароль не совпадают. Введите правильные данные.</span>
+                    <span class="form__error">{% if form.errors %}Имя пользвоателя и пароль не совпадают. Введите правильные данные.{% endif %}</span>
                 </div>
             </div>
             <div class="form__footer">

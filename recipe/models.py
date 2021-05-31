@@ -47,7 +47,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=CASCADE,
-        related_name='author',
+        related_name='recipes',
         verbose_name='Автор'
     )
     title = models.CharField(

@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from .models import Recipe, Favorites
+from django.shortcuts import get_object_or_404, render
+from .models import Recipe, Favorites, User
 from django.core.paginator import Paginator
 from django.views.generic.list import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -32,15 +32,20 @@ class FavoritesView(LoginRequiredMixin, ListView):
         queryset = queryset.filter(favorites__user=self.request.user)
         return queryset
 
-# def index(request):
-#     recipe_list = Recipe.objects.all()  # select_related('имя связи') - для кэширования связанных объектов
-#     # print(recipe_list)
-#     # recipe_list = super().get_queryset()
-#     paginator = Paginator(recipe_list, 6)
-#     page_number = request.GET.get('page')
-#     page = paginator.get_page(page_number)
-#     return render(
-#         request,
-#         'index.html',
-#         {'page': page, 'paginator': paginator}
-#     )
+
+class ProfileView(ListView):
+    context_object_name = 'recipe_list'
+    paginate_by = 6
+    template_name = 'profile.html'
+
+    def get_queryset(self):
+        author = get_object_or_404(User, username=self.kwargs.get('username'))
+        qureyset = author.recipes.all()
+        qureyset = qureyset.annotate_favorites(user_id=self.request.user.id)
+        return qureyset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        author = get_object_or_404(User, username=self.kwargs.get('username'))
+        context['author'] = author
+        return context
