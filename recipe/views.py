@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from .models import Recipe, User
+from .models import Follow, Recipe, User, Favorites
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -55,3 +55,19 @@ class RecipeDetailView(DetailView):
     model = Recipe
     template_name = 'recipe.html'
     context_object_name = 'recipe'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.annotate_favorites(user_id=self.request.user.id)
+        return queryset
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     is_favorite = Favorites.objects.filter(
+    #         user__username=self.request.user,
+    #         recipe__id=self.object.id
+    #     ).exists()
+    #     context['is_favorite'] = is_favorite
+    #     print(self.object.author, self.object.id)
+    #     print(is_favorite)
+    #     return context

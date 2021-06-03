@@ -43,6 +43,17 @@ class RecipeQuerySet(models.QuerySet):
         return queryset
 
 
+class FavoriteManager(models.Manager):
+    def with_favorites(self, user_id):
+        obj = self.annotate(is_favorite=Exists(
+            Favorites.objects.filter(
+                    user_id=user_id,
+                    recipe_id=OuterRef('pk')
+            )
+        ))
+        return obj
+
+
 class Recipe(models.Model):
     author = models.ForeignKey(
         User,

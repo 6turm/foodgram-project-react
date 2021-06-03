@@ -6,9 +6,7 @@
     <div class="card__body">
         <a class="card__title link" href="#" target="_blank">{{recipe.title}}</a>
         <ul class="card__items">
-            <li class="card__item"><span class="badge badge_style_green">Обед</span></li>
-            <li class="card__item"><span class="badge badge_style_orange">Завтрак</span></li>
-            <li class="card__item"><span class="badge badge_style_purple">Ужин</span></li>
+            {% include 'includes/card_tags.html' with tags=recipe.tag.all %}
         </ul>
         <div class="card__items card__items_column">
             <p class="card__text"><span class="icon-time"></span> {{recipe.coocking_time}} мин.</p>
