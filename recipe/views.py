@@ -1,3 +1,5 @@
+from django.db.models.expressions import Exists, OuterRef
+from django.db.models.query import Prefetch, QuerySet
 from django.shortcuts import get_object_or_404
 from .models import Follow, Recipe, User, Favorites
 from django.views.generic.list import ListView
@@ -33,6 +35,26 @@ class FavoritesView(LoginRequiredMixin, ListView):
         return queryset
 
 
+class MyFollowView(LoginRequiredMixin, ListView):
+    queryset = User.objects.prefetch_related('recipes'
+        # Prefetch('recipes', queryset=Recipe.objects[:3])
+    )
+    template_name = 'myFollow.html'
+    context_object_name = 'author_list'
+
+    def get_recipes():
+        pass
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # queryset = queryset.annotate(is_follow=Exists(
+        #     Favorites.objects.filter(
+        #         user_id=self.request.user.id, author_id=OuterRef('pk'))
+        # ))
+        queryset = queryset.filter(following__user=self.request.user)
+        return queryset
+
+
 class ProfileView(ListView):
     context_object_name = 'recipe_list'
     paginate_by = 6
@@ -61,13 +83,13 @@ class RecipeDetailView(DetailView):
         queryset = queryset.annotate_favorites(user_id=self.request.user.id)
         return queryset
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     is_favorite = Favorites.objects.filter(
-    #         user__username=self.request.user,
-    #         recipe__id=self.object.id
-    #     ).exists()
-    #     context['is_favorite'] = is_favorite
-    #     print(self.object.author, self.object.id)
-    #     print(is_favorite)
-    #     return context
+
+# class MyFollowView(ListView):
+#     model = Recipe
+#     template_name = 'myfollow.html'
+#     context_object_name = 'recipe'
+
+#     def get_queryset(self):
+#         queryset = super().get_queryset()
+#         queryset = queryset.annotate_favorites(user_id=self.request.user.id)
+#         return queryset

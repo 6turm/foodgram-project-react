@@ -4,6 +4,7 @@ from django.db.models.deletion import CASCADE, PROTECT
 from django.core.validators import MinValueValidator
 from django.db.models.expressions import Exists, OuterRef
 
+
 User = get_user_model()
 
 
@@ -43,15 +44,15 @@ class RecipeQuerySet(models.QuerySet):
         return queryset
 
 
-class FavoriteManager(models.Manager):
-    def with_favorites(self, user_id):
-        obj = self.annotate(is_favorite=Exists(
-            Favorites.objects.filter(
-                    user_id=user_id,
-                    recipe_id=OuterRef('pk')
-            )
-        ))
-        return obj
+# class UserQuerySet(models.QuerySet):
+#     def annotate_follow(self, user_id):
+#         queryset = self.annotate(is_follow=Exists(
+#             Follow.objects.filter(
+#                 user_id=user_id,
+#                 author_id=OuterRef('pk')
+#             )
+#         ))
+#         return queryset
 
 
 class Recipe(models.Model):
