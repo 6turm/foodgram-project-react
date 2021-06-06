@@ -8,6 +8,7 @@ api_patterns = [
         'favorites/<int:pk>/',
         views.RemoveFromFavorites.as_view(),
         name='remove_favorites'),
+    path('subscribe/', views.Subscribe.as_view(), name='subscribe'),
 ]
 
 urlpatterns = [

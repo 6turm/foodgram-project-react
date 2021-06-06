@@ -25,7 +25,9 @@
 
 
 {% block content %}
-    {% include 'recipe/includes/follow_button.html' %}
+    <div class="author-subscribe" data-author="323">
+        <p style="padding: 0 0 2em 0;">{% include 'recipe/includes/follow_button.html' %}</p>
+    </div>
     <div class="card-list">
         {% for recipe in recipe_list %}
             {% include 'recipe/includes/recipe_item.html' with recipe=recipe %}

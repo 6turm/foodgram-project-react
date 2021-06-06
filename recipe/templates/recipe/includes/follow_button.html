@@ -1,3 +1,18 @@
-<div class="author-subscribe" data-author="323">
-    <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></p>
-</div>
+{% if user.is_authenticated %}
+    {% if is_follow %}
+        {{author.name}} {{author.name}}
+        <button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Отписаться</button>
+    {% else %}
+        <button class="button button_style_light-blue button_size_auto" name="subscribe">Подписаться</button>
+    {% endif %}    
+{% endif %}
+<!-- Profile:
+<button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button> -->
+
+
+<!-- follow_item:
+<button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button> -->
+
+
+<!-- recipe_detail
+<button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button> -->

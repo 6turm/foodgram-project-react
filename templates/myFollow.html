@@ -24,7 +24,7 @@
 {% block content %}
     <div class="card-list">
         {% for author in author_list %}
-            {% include 'recipe/includes/follow_item.html' with author=author %}
+            {% include 'recipe/includes/follow_item.html' %}
         {% endfor %}
     </div>
 {% endblock %}
@@ -37,7 +37,7 @@
 
 {% block scripts %}
 <!-- Взято из indexAuth.html (часть спрятать под if is_authenticated?) -->
-<script src={% static "./js/config/config.js"></script>
+<script src={% static "./js/config/config.js" %}></script>
 <script src={% static "./js/components/MainCards.js" %}></script>
 <script src={% static "./js/components/MyFollow.js" %}></script>
 <script src={% static "./js/components/Subscribe.js" %}></script>
