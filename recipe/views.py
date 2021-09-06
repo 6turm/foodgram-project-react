@@ -82,3 +82,11 @@ class RecipeDetailView(DetailView):
         queryset = super().get_queryset()
         queryset = queryset.annotate_favorites(user_id=self.request.user.id)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        context['is_follow'] = Follow.objects.filter(
+            user_id=self.request.user.id, author_id=
+        )
+        return super().get_context_data(self, **kwargs)
+

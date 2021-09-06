@@ -1,9 +1,8 @@
 {% if user.is_authenticated %}
     {% if is_follow %}
-        {{author.name}} {{author.name}}
         <button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Отписаться</button>
     {% else %}
-        <button class="button button_style_light-blue button_size_auto" name="subscribe">Подписаться</button>
+        <button class="button button_style_light-blue button_size_auto" name="subscribe">Подписаться на автора</button>
     {% endif %}    
 {% endif %}
 <!-- Profile:
