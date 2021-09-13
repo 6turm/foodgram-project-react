@@ -5,10 +5,10 @@ from django.contrib import admin
 User = get_user_model()
 
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(UserAdmin):
     list_display = ('pk', 'username', 'first_name', 'last_name', 'email')
-    empty_value_display = '-пусто-'
     list_filter = UserAdmin.list_filter + ('username', 'email')
+    empty_value_display = '-пусто-'
 
 
 admin.site.unregister(User)

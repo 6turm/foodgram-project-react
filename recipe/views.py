@@ -69,7 +69,8 @@ class ProfileView(ListView):
         author = get_object_or_404(User, username=self.kwargs.get('username'))
         context['author'] = author
         context['is_follow'] = Follow.objects.filter(
-            user_id=self.request.user.id, author_id=author.id).exists
+            user_id=self.request.user.id, author_id=author.id).exists()
+        print('Context ProfileView: ',context )
         return context
 
 
@@ -84,9 +85,11 @@ class RecipeDetailView(DetailView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        context=super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        author_id = super().get_object().author.id
         context['is_follow'] = Follow.objects.filter(
-            user_id=self.request.user.id, author_id=
-        )
-        return super().get_context_data(self, **kwargs)
+            user_id=self.request.user.id, author_id=author_id
+        ).exists()
+        print('Context RecipeDetailView: ',context )
+        return context
 
