@@ -24,7 +24,7 @@
 {% block content %}
     <div class="card-list">
         {% for author in author_list %}
-            {% include 'recipe/includes/follow_item.html' %}
+            {% include 'recipe/includes/follow_item.html' with is_follow=author.is_follow %}
         {% endfor %}
     </div>
 {% endblock %}
@@ -42,5 +42,5 @@
 <script src={% static "/js/components/Subscribe.js" %}></script>
 <script src={% static "/js/components/Header.js" %}></script>
 <script src={% static "/js/api/Api.js" %}></script>
-<script src={% static "myFollow.js" %}></script>
+<script src={% static "/myFollow.js" %}></script>
 {% endblock %}

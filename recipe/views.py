@@ -39,6 +39,7 @@ class MyFollowView(LoginRequiredMixin, ListView):
     queryset = User.objects.prefetch_related('recipes')
     template_name = 'myFollow.html'
     context_object_name = 'author_list'
+    paginate_by = 3
 
     login_url = 'login'
     redirect_field_name = 'next'
@@ -50,7 +51,12 @@ class MyFollowView(LoginRequiredMixin, ListView):
             Follow.objects.filter(
                 user_id=self.request.user.id, author_id=OuterRef('pk'))
         ))
+        print('@@@ queryset of MyFollow: ', queryset)
         return queryset
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print('@@@ context of MyFollow: ', context)
+        return context
 
 
 class ProfileView(ListView):

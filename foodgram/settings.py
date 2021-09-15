@@ -134,7 +134,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # сюда собираются файлы по collectstatic
-STATICFILES_DIRS = [BASE_DIR / 'staticfiles']  # отсюда файлы будут собираться
+STATICFILES_DIRS = [BASE_DIR / 'staticfiles']  # отсюда файлы будут собираться?
 MEDIA_URL = '/MEDIA/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
