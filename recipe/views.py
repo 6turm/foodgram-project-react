@@ -1,9 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models.expressions import Exists, OuterRef
-from django.db.models.query import Prefetch, QuerySet
-from django.http import request
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Follow, Ingredient, Recipe, User, Tag
+from .models import Follow, OrderList, Recipe, User, Tag
 from .forms import RecipeForm
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
@@ -13,7 +11,6 @@ from .utils import get_ingredients_from_request, save_recipe, get_ingredients_fr
 
 class IndexView(ListView):
     queryset = Recipe.objects.all()
-    context_object_name = 'recipe_list'
     paginate_by = 6
     template_name = 'index.html'
 
@@ -21,15 +18,19 @@ class IndexView(ListView):
         tags = self.request.GET.getlist('tag')
         queryset = super().get_queryset()
         if tags:
-            queryset = queryset.filter(tag__slug__in=tags)
+            queryset = queryset.filter(tag__slug__in=tags).distinct()
         queryset = queryset.annotate_favorites(user_id=self.request.user.id)
+        queryset = queryset.annotate(is_purchase=Exists(
+            OrderList.objects.filter(
+                user_id=self.request.user.id, recipe_id=OuterRef('pk'))
+                )
+            )
         return queryset
-    
+
     def get_context_data(self):
         context = super().get_context_data()
         context['tags'] = Tag.objects.all()
         return context
-    
 
 
 class FavoritesView(LoginRequiredMixin, ListView):
@@ -55,11 +56,12 @@ class FavoritesView(LoginRequiredMixin, ListView):
         context['tags'] = Tag.objects.all()
         return context
 
+
 class MyFollowView(LoginRequiredMixin, ListView):
     queryset = User.objects.prefetch_related('recipes')
     template_name = 'myFollow.html'
     context_object_name = 'author_list'
-    paginate_by = 3
+    paginate_by = 1
 
     login_url = 'login'
     redirect_field_name = 'next'
@@ -72,6 +74,7 @@ class MyFollowView(LoginRequiredMixin, ListView):
                 user_id=self.request.user.id, author_id=OuterRef('pk'))
         ))
         return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
@@ -126,33 +129,55 @@ def create_recipe(request):
     if request.method == 'POST':
         ingredients = get_ingredients_from_request(request)
 
-    form = RecipeForm(request.POST or None, files=request.FILES or None, ingredients=ingredients)
+    form = RecipeForm(
+        request.POST or None,
+        files=request.FILES or None,
+        ingredients=ingredients
+        )
 
     if form.is_valid():
         recipe = save_recipe(request, form, ingredients)
-        return redirect('recipe', pk=recipe.id, username=recipe.author.username)
-    
+        return redirect(
+            'recipe', pk=recipe.id, username=recipe.author.username
+            )
+
     context = {'form': form, 'ingredients': ingredients}
-    # ингридиенты передаются для повторного отображения в случае ошибок при отправке формы
+    # ингридиенты передаются для повторного отображения в случае ошибок
+    # при отправке формы
     return render(request, 'recipe_create.html', context)
+
 
 @login_required
 def edit_recipe(request, username, pk):
     recipe = get_object_or_404(Recipe, author__username=username, id=pk)
     if request.user != recipe.author:
         return redirect('recipe', pk=pk, username=username)
-    
+
     if request.method == 'POST':
         ingredients = get_ingredients_from_request(request)
     else:
         ingredients = get_ingredients_from_recipe(recipe)
-    form = RecipeForm(request.POST or None, files=request.FILES or None, instance=recipe, ingredients=ingredients)
-    
+    form = RecipeForm(
+        request.POST or None, files=request.FILES or None,
+        instance=recipe, ingredients=ingredients
+        )
+
     if form.is_valid():
         recipe.ingredients.all().delete()
         recipe = save_recipe(request, form, ingredients)
-        return redirect('recipe', pk=recipe.id, username=recipe.author.username)
+        return redirect(
+            'recipe', pk=recipe.id, username=recipe.author.username
+            )
 
     context = {'form': form, 'ingredients': ingredients}
-    # ингридиенты передаются для повторного отображения в случае ошибок при отправке формы
+    # ингридиенты передаются для повторного отображения в случае ошибок
+    # при отправке формы
     return render(request, 'recipe_create.html', context)
+
+
+@login_required
+def delete_recipe(request, username, pk):
+    recipe = get_object_or_404(Recipe, author__username=username, id=pk)
+    if request.user == recipe.author:
+        recipe.delete()
+    return redirect('index')

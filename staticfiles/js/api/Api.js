@@ -22,7 +22,7 @@ class Api {
         }
     }
   getPurchases () {
-    return fetch(`/purchases/`, {
+    return fetch(`purchases/`, {
       headers: this.headers
     })
       .then( e => {
@@ -33,7 +33,7 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(`/purchases/`, {
+    return fetch(`/api/purchases/`, {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify({

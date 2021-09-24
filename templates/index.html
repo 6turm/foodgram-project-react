@@ -31,7 +31,7 @@
 {% endblock %}
 
 {% block paginator %}
-    {% if page.has_other_pages %}
+    {% if is_paginated %}
         {% include 'includes/paginator.html' %}
     {% endif %}
 {% endblock %}
