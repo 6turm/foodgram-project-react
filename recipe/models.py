@@ -9,10 +9,12 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    name = models.CharField(unique=True, max_length=50, verbose_name='Тег')
+    name = models.CharField(max_length=50, verbose_name='Тег')
+    slug = models.SlugField(unique=True, max_length=50, verbose_name='Слаг')
+    color = models.CharField(max_length=50, default='orange', verbose_name='Цвет')
 
     def __str__(self) -> str:
-        return f'{self.name}'
+        return f'{self.slug}'
 
     class Meta:
         verbose_name = 'Тег'
@@ -20,6 +22,9 @@ class Tag(models.Model):
 
 
 class Product(models.Model):
+    '''
+    Доступные продукты в формате "Наименование - ед. изм."
+    '''
     title = models.CharField(
         unique=True, max_length=225, db_index=True, verbose_name='Название'
     )
@@ -92,9 +97,6 @@ class Recipe(models.Model):
         verbose_name='Дата публикации',
         auto_now_add=True
     )
-    slug = models.SlugField(
-        verbose_name='Короткая ссылка'
-    )
     objects = RecipeQuerySet.as_manager()
 
     def favorit_count(self, obj):
@@ -110,6 +112,9 @@ class Recipe(models.Model):
 
 
 class Ingredient(models.Model):
+    '''
+    Ингридиенты в заказе: Продукт + количество.
+    '''
     product = models.ForeignKey(
         Product,
         on_delete=PROTECT,

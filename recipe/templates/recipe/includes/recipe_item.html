@@ -4,7 +4,7 @@
         <img class="card__image" src="{{ im.url }}" />
     {% endthumbnail %}
     <div class="card__body">
-        <a class="card__title link" href="{% url 'recipe' pk=recipe.pk %}">{{recipe.title}}</a>
+        <a class="card__title link" href="{% url 'recipe' username=recipe.author.username pk=recipe.pk %}">{{recipe.title}}</a>
         <ul class="card__items">
             {% include 'includes/card_tags.html' with tags=recipe.tag.all %}
         </ul>

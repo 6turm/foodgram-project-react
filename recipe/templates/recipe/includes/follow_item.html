@@ -11,7 +11,7 @@
                             {% thumbnail recipe.image "480x480" upscale=True as im %}
                             <img src="{{ im.url }}" alt="какой-то-текст" class="recipe__image">
                         {% endthumbnail %}
-                        <h3 class="recipe__title"><a href="{% url 'recipe' pk=recipe.pk %}" style="text-decoration: none; color: black"> {{ recipe.title }} </a></h3>
+                        <h3 class="recipe__title"><a href="{% url 'recipe' pk=recipe.pk username=recipe.author.username %}" style="text-decoration: none; color: black"> {{ recipe.title }} </a></h3>
                         <p class="recipe__text"><span class="icon-time"></span>{{ recipe.coocking_time }} мин. </p>
                     </div>
                 </li>

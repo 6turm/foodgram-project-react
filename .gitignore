@@ -139,3 +139,7 @@ orig_static/
 
 # Static
 static/
+
+# Media
+media/*
+!media/recipe

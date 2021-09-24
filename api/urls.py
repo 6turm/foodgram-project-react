@@ -10,6 +10,7 @@ api_patterns = [
         name='remove_favorites'),
     path('subscribe/', views.Subscribe.as_view(), name='subscribe'),
     path('subscribe/<int:pk>/', views.UnSubscribe.as_view(), name='unsubscribe'),
+    path('products', views.GetProducts.as_view()),
 ]
 
 urlpatterns = [

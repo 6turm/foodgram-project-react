@@ -1,14 +1,15 @@
 <ul class="tags">
-    <li class="tags__item">
-        <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="#"></a>
-        <span class="tags__label">Завтрак</span>
-    </li>
-    <li class="tags__item">
-        <a id="lunch" class="tags__checkbox tags__checkbox_style_green tags__checkbox_active" href="#"></a>
-        <span for="lunch" class="tags__label">Обед</span>
-    </li>
-    <li class="tags__item">
-        <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="#"></a>
-        <label for="dinner" class="tags__label">Ужин</label>
-    </li>
+    {% load template_filters %}
+    {% for tag in tags %}
+        <li class="tags__item">
+            <a 
+                id="{{tag.name}}" 
+                class="
+                    tags__checkbox tags__checkbox_style_{{tag.color}} 
+                    {% if tag.slug in request.get_full_path %} tags__checkbox_active {% endif %}
+                    " 
+                href="?{{ request|update_tag_url:tag }}"></a>
+            <span class="tags__label">{{ tag.name }}</span>
+        </li>
+    {% endfor %}
 </ul>

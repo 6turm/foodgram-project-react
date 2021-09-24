@@ -4,6 +4,10 @@ from .models import (
     )
 
 
+class IngredientInline(admin.TabularInline):
+    model = Ingredient
+    extra = 1
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('pk', 'title', 'dimension')
     empty_value_display = '-пусто-'
@@ -11,6 +15,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class RecipeAdmin(admin.ModelAdmin):
+    inlines = (IngredientInline,)
     list_display = ('pk', 'title', 'author')
     empty_value_display = '-пусто-'
     list_filter = ('title', 'author', 'tag')

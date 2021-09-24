@@ -114,7 +114,7 @@ class Api {
         })
   }
     getIngredients  (text)  {
-        return fetch(`/ingredients?query=${text}/`, {
+        return fetch(`/api/products?query=${text}`, {
             headers: this.headers
         })
             .then( e => {
