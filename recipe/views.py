@@ -61,7 +61,7 @@ class MyFollowView(LoginRequiredMixin, ListView):
     queryset = User.objects.prefetch_related('recipes')
     template_name = 'myFollow.html'
     context_object_name = 'author_list'
-    paginate_by = 1
+    paginate_by = 6
 
     login_url = 'login'
     redirect_field_name = 'next'
@@ -115,11 +115,38 @@ class RecipeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        author_id = super().get_object().author.id
+        author_id = self.object.author.id
+        recipe_id = self.object.pk
         context['is_follow'] = Follow.objects.filter(
             user_id=self.request.user.id, author_id=author_id
         ).exists()
+        context['is_purchase'] = OrderList.objects.filter(
+            user_id=self.request.user.id, recipe_id=recipe_id
+        ).exists()
+        print('@@@@ context', context)
         return context
+
+
+class OrderListView(LoginRequiredMixin, ListView):
+    queryset = Recipe.objects.all()
+    context_object_name = 'purchases'
+    # paginate_by = 6
+    template_name = 'shop_list.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(order_list__user_id=self.request.user.id)
+        print('@@@@ ', queryset)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print('@@@ context', context)
+        return context
+
+
+def dounload_purchases(request):
+    pass
 
 
 @login_required

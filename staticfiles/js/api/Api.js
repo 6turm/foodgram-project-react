@@ -48,7 +48,7 @@ class Api {
       })
   }
   removePurchases (id){
-    return fetch(`/purchases/${id}/`, {
+    return fetch(`/api/purchases/${id}/`, {
       method: 'DELETE',
       headers: this.headers
     })

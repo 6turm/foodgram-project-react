@@ -99,8 +99,9 @@ class Recipe(models.Model):
     )
     objects = RecipeQuerySet.as_manager()
 
-    def favorit_count(self, obj):
-        return obj.favorites.count()
+    # def favorit_count(self, obj):
+    #     print('@@@@ favorit in model ')
+    #     return obj.favorites.count()
 
     def __str__(self) -> str:
         return f'{self.title}, от {self.author}'

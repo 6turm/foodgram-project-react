@@ -50,14 +50,15 @@ class AddPurchase(APIView):
     def post(self, request, format=None):
         OrderList.objects.get_or_create(
             user=request.user,
-            recipe_id=request.data[id]
+            recipe_id=request.data['id']
             )
         return JsonResponse({'success': True}, status=status.HTTP_200_OK)
 
 
 class RemovePurchase(APIView):
-    def delete(self, request, format=None):
-        pass
+    def delete(self, request, pk, format=None):
+        OrderList.objects.filter(user=request.user, recipe_id=pk).delete()
+        return Response({'success': True}, status=status.HTTP_200_OK)
 
 
 class DounloadPurchase(APIView):
