@@ -136,6 +136,7 @@ dmypy.json
 
 # Temporary static
 orig_static/
+.orig_static/
 
 # Static
 static/*
