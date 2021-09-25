@@ -1,8 +1,13 @@
-<li class="shopping-list__item" data-id="111">
+<li class="shopping-list__item" data-id="{{ recipe.id }}">
     <div class="recipe recipe_reverse">
-        <img src="./images/testCardImg.png" alt="какой-то текст" class="recipe__image recipe__image_big">
-        <h3 class="recipe__title">{{ recipe.title }}</h3>
+        {% load thumbnail %}
+        {% thumbnail recipe.image "480x480" crop="center" upscale=True as im %}
+        <!-- <img class="card__image" src="{{ im.url }}" /> -->
+        <img src="{{ im.url }}" alt="какой-то текст" class="recipe__image recipe__image_big">
+        {% endthumbnail %}
+        <a  href="{% url 'recipe' username=recipe.author.username pk=recipe.pk %}">{{recipe.title}}</a>
+        <!-- <h3 class="recipe__title">{{ recipe.title }}</h3> -->
         <p class="recipe__text"><span class="icon-time"></span> {{ recipe.coocking_time }} мин. </p>
     </div>
-    <a href="#" class="shopping-list__button link">Удалить</a>
+    <a href="" class="shopping-list__button link">Удалить</a>
 </li>

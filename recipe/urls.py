@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import IndexView, FavoritesView, ProfileView, RecipeDetailView, MyFollowView, OrderListView, create_recipe, delete_recipe, edit_recipe, dounload_purchases
 
+from .views import (FavoritesView, IndexView, MyFollowView, OrderListView,
+                    ProfileView, RecipeDetailView, create_recipe,
+                    delete_recipe, dounload_purchases, edit_recipe)
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),

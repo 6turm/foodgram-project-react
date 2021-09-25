@@ -25,7 +25,7 @@
                 {% include 'recipe/includes/purchase_item.html' %}
             {% endfor %}
         </ul>
-        <a href="#"><button class="button button_style_blue">Скачать список</button></a>
+        <a href="{% url 'get_purchases' %}"><button class="button button_style_blue">Скачать список</button></a>
     </div>
 {% endblock %}
 

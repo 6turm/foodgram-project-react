@@ -1,5 +1,3 @@
-<!-- Сделать вывод меню через if -->
-
 <header class="header">
     <nav class="nav">
         <div class="nav__container container">
@@ -9,7 +7,7 @@
                     <li class="nav__item {% if active == 'follow' %} nav__item_active {% endif %}"><a href="{% url 'myfollow' %}" class="nav__link link">Мои подписки</a></li>
                     <li class="nav__item {% if active == 'create' %} nav__item_active {% endif %}"><a href="{% url 'create_recipe' %}" class="nav__link link">Создать рецепт</a></li>
                     <li class="nav__item {% if active == 'favorites' %} nav__item_active {% endif %}"><a href="{% url 'favorites' %}" class="nav__link link">Избранное</a></li>
-                    <li class="nav__item {% if active == 'purchases' %} nav__item_active {% endif %}"><a href="#" class="nav__link link">Список покупок</a> 
+                    <li class="nav__item {% if active == 'purchases' %} nav__item_active {% endif %}"><a href="{% url 'purchases' %}" class="nav__link link">Список покупок</a> 
                     <span class="badge badge_style_blue nav__badge" id="counter">{{ user.order_list.count }}</span></li>
                 {% endif %}
             </ul>

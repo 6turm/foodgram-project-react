@@ -11,7 +11,9 @@ User = get_user_model()
 class Tag(models.Model):
     name = models.CharField(max_length=50, verbose_name='Тег')
     slug = models.SlugField(unique=True, max_length=50, verbose_name='Слаг')
-    color = models.CharField(max_length=50, default='orange', verbose_name='Цвет')
+    color = models.CharField(
+        max_length=50, default='orange', verbose_name='Цвет'
+        )
 
     def __str__(self) -> str:
         return f'{self.slug}'
@@ -47,17 +49,6 @@ class RecipeQuerySet(models.QuerySet):
             )
         ))
         return queryset
-
-
-# class UserQuerySet(models.QuerySet):
-#     def annotate_follow(self, user_id):
-#         queryset = self.annotate(is_follow=Exists(
-#             Follow.objects.filter(
-#                 user_id=user_id,
-#                 author_id=OuterRef('pk')
-#             )
-#         ))
-#         return queryset
 
 
 class Recipe(models.Model):
@@ -99,11 +90,7 @@ class Recipe(models.Model):
     )
     objects = RecipeQuerySet.as_manager()
 
-    # def favorit_count(self, obj):
-    #     print('@@@@ favorit in model ')
-    #     return obj.favorites.count()
-
-    def __str__(self) -> str:
+    def __str__(self):
         return f'{self.title}, от {self.author}'
 
     class Meta:

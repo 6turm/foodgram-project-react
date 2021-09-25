@@ -1,12 +1,15 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.expressions import Exists, OuterRef
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Follow, OrderList, Recipe, User, Tag
-from .forms import RecipeForm
-from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .utils import get_ingredients_from_request, save_recipe, get_ingredients_from_recipe
+from django.views.generic.list import ListView
+from django.http import HttpResponse
+import csv
+from .forms import RecipeForm
+from .models import Follow, OrderList, Recipe, Tag, User
+from .utils import (get_ingredients_from_recipe, get_ingredients_from_request,
+                    save_recipe)
 
 
 class IndexView(ListView):
@@ -22,7 +25,7 @@ class IndexView(ListView):
         queryset = queryset.annotate_favorites(user_id=self.request.user.id)
         queryset = queryset.annotate(is_purchase=Exists(
             OrderList.objects.filter(
-                user_id=self.request.user.id, recipe_id=OuterRef('pk'))
+                user=self.request.user, recipe_id=OuterRef('pk'))
                 )
             )
         return queryset
@@ -47,7 +50,7 @@ class FavoritesView(LoginRequiredMixin, ListView):
         queryset = super().get_queryset()
         queryset = queryset.filter(favorites__user=self.request.user)
         if tags:
-            queryset = queryset.filter(tag__slug__in=tags)
+            queryset = queryset.filter(tag__slug__in=tags).distinct()
         queryset = queryset.annotate_favorites(user_id=self.request.user.id)
         return queryset
 
@@ -71,7 +74,7 @@ class MyFollowView(LoginRequiredMixin, ListView):
         queryset = queryset.filter(following__user=self.request.user)
         queryset = queryset.annotate(is_follow=Exists(
             Follow.objects.filter(
-                user_id=self.request.user.id, author_id=OuterRef('pk'))
+                user=self.request.user, author_id=OuterRef('pk'))
         ))
         return queryset
 
@@ -91,7 +94,7 @@ class ProfileView(ListView):
         queryset = author.recipes.all()
         queryset = queryset.annotate_favorites(user_id=self.request.user.id)
         if tags:
-            queryset = queryset.filter(tag__slug__in=tags)
+            queryset = queryset.filter(tag__slug__in=tags).distinct()
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -99,7 +102,8 @@ class ProfileView(ListView):
         author = get_object_or_404(User, username=self.kwargs.get('username'))
         context['author'] = author
         context['is_follow'] = Follow.objects.filter(
-            user_id=self.request.user.id, author_id=author.id).exists()
+            user=self.request.user, author=author).exists()
+        context['tags'] = Tag.objects.all()
         return context
 
 
@@ -115,14 +119,12 @@ class RecipeDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        author_id = self.object.author.id
-        recipe_id = self.object.pk
+        author = self.object.author
+        recipe = self.object
         context['is_follow'] = Follow.objects.filter(
-            user_id=self.request.user.id, author_id=author_id
-        ).exists()
+            user=self.request.user, author=author).exists()
         context['is_purchase'] = OrderList.objects.filter(
-            user_id=self.request.user.id, recipe_id=recipe_id
-        ).exists()
+            user=self.request.user, recipe=recipe).exists()
         print('@@@@ context', context)
         return context
 
@@ -130,12 +132,11 @@ class RecipeDetailView(DetailView):
 class OrderListView(LoginRequiredMixin, ListView):
     queryset = Recipe.objects.all()
     context_object_name = 'purchases'
-    # paginate_by = 6
     template_name = 'shop_list.html'
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(order_list__user_id=self.request.user.id)
+        queryset = queryset.filter(order_list__user=self.request.user)
         print('@@@@ ', queryset)
         return queryset
 
@@ -146,7 +147,27 @@ class OrderListView(LoginRequiredMixin, ListView):
 
 
 def dounload_purchases(request):
-    pass
+    recipes = Recipe.objects.filter(order_list__user=request.user)
+    purchase_list = recipes.values_list(
+        'ingredients__product__id',
+        'ingredients__product__title',
+        'ingredients__amount',
+        'ingredients__product__dimension'
+        )
+
+    purchase_dict = {x[0]: [x[1], 0, x[3]] for x in purchase_list}
+
+    for ing in purchase_list:
+        purchase_dict[ing[0]][1] += ing[2]
+    print('@@@@@ dict', purchase_dict)
+
+    response = HttpResponse(content_type='text/plain')  
+    response['Content-Disposition'] = 'attachment; filename="shop_list.txt"'
+    writer = csv.writer(response)
+    for ing in purchase_dict.values():
+        writer.writerow([f'{ing[0]} ({ing[2]}) — {ing[1]}'])
+
+    return response
 
 
 @login_required
