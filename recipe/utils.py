@@ -1,7 +1,9 @@
-from recipe.models import Ingredient, Product
+from decimal import Decimal
+
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from decimal import *
+
+from recipe.models import Ingredient, Product
 
 
 def get_ingredients_from_request(request):
@@ -11,7 +13,10 @@ def get_ingredients_from_request(request):
     for key, name in post.items():
         if key.startswith('nameIngredient'):
             num = key.partition('_')[-1]
-            ingredients[name] = [post[f'valueIngredient_{num}'], post[f'unitsIngredient_{num}']]
+            ingredients[name] = [
+                post[f'valueIngredient_{num}'],
+                post[f'unitsIngredient_{num}'],
+                ]
     return ingredients
 
 
@@ -34,7 +39,11 @@ def save_recipe(request, form, ingredients):
         objs = []
         for name, params in ingredients.items():
             product = get_object_or_404(Product, title=name)
-            objs.append(Ingredient(product=product, recipe=recipe, amount=Decimal(params[0].replace(',', '.'))))
+            objs.append(Ingredient(
+                product=product,
+                recipe=recipe,
+                amount=Decimal(params[0].replace(',', '.'))
+                ))
 
         Ingredient.objects.bulk_create(objs)
         form.save_m2m()

@@ -53,23 +53,10 @@
                                 <label for="id_{{tag.slug}}" class="tags__label">{{ tag.name }}</label>
                             </div>
                         {% endfor %}
-                        <!-- <div class="tags__item">
-                            <input type="checkbox" name="breakfast" id="id_breakfast" class="tags__checkbox tags__checkbox_style_orange">
-                            <label for="id_breakfast" class="tags__label">Завтрак</label>
-                        </div>
-                        <div class="tags__item">
-                            <input type="checkbox" name="lunch" id="id_lunch" class="tags__checkbox tags__checkbox_style_green" checked>
-                            <label for="id_lunch" class="tags__label">Обед</label>
-                        </div>
-                        <div class="tags__item">
-                            <input type="checkbox" name="dinner" id="id_dinner" class="tags__checkbox tags__checkbox_style_purple" checked>
-                            <label for="id_dinner" class="tags__label">Ужин</label>
-                        </div> -->
                     </div>
                     {% for error in form.tag.errors %}
                     <span class="form__error">{{ error }}</span>
                     {% endfor %}
-                    <!-- <span class="form__error">{{ form.tag.errors }}</span> -->
                 </div>
             </div>
             <div class="form__group">
@@ -130,12 +117,6 @@
                 <div class="form__field-group">
                     {{ form.image|addclass:"form__file-button" }}
                     <input type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" class="form__file">
-                <!-- <div class="form__field-group">
-                    {% if form.image %}
-                        {{ form.image }}
-                    {% else %}
-                    <input type="file" name="image" id="id_file">
-                    {% endif %} -->
                     <span class="form__error"></span>
                 </div>
             </div>
@@ -161,6 +142,7 @@
 {% endblock %}
 
 {% block scripts %}
+
 <script src={% static "/js/config/config.js" %}></script>
 <script src={% static "/js/components/Header.js" %}></script>
 <script src={% static "/js/utils/debouncing.js" %}></script>

@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import (
-    Product, Recipe, Ingredient, Tag, Follow, Favorites, OrderList
-    )
+
+from .models import (Favorites, Follow, Ingredient, OrderList, Product, Recipe,
+                     Tag)
 
 
 class IngredientInline(admin.TabularInline):
@@ -21,8 +21,6 @@ class RecipeAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
     list_filter = ('title', 'author', 'tag')
     readonly_fields = ('favorite_count',)
-    # fields = super().fields() + ('favorite_count')
-    # list_filter = UserAdmin.list_filter + ('username', 'email')
 
     def favorite_count(self, obj):
         return obj.favorites.count()

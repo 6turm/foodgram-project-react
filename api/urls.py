@@ -9,7 +9,11 @@ api_patterns = [
         views.RemoveFromFavorites.as_view(),
         name='remove_favorites'),
     path('subscribe/', views.Subscribe.as_view(), name='subscribe'),
-    path('subscribe/<int:pk>/', views.UnSubscribe.as_view(), name='unsubscribe'),
+    path(
+        'subscribe/<int:pk>/',
+        views.UnSubscribe.as_view(),
+        name='unsubscribe'
+        ),
     path('purchases/', views.AddPurchase.as_view(), name='add_purchase'),
     path(
         'purchases/<int:pk>/',
@@ -22,5 +26,3 @@ api_patterns = [
 urlpatterns = [
     path('', include(format_suffix_patterns(api_patterns))),
 ]
-
-

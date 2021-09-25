@@ -1,8 +1,8 @@
 from django.http.response import JsonResponse
+from recipe.models import Favorites, Follow, OrderList, Product
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from recipe.models import Favorites, Follow, Product, OrderList
+from rest_framework.views import APIView
 
 
 class AddToFavorites(APIView):

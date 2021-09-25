@@ -1,11 +1,13 @@
+import csv
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.expressions import Exists, OuterRef
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.http import HttpResponse
-import csv
+
 from .forms import RecipeForm
 from .models import Follow, OrderList, Recipe, Tag, User
 from .utils import (get_ingredients_from_recipe, get_ingredients_from_request,
@@ -22,12 +24,15 @@ class IndexView(ListView):
         queryset = super().get_queryset()
         if tags:
             queryset = queryset.filter(tag__slug__in=tags).distinct()
-        queryset = queryset.annotate_favorites(user_id=self.request.user.id)
-        queryset = queryset.annotate(is_purchase=Exists(
-            OrderList.objects.filter(
-                user=self.request.user, recipe_id=OuterRef('pk'))
+        if self.request.user.is_authenticated:
+            queryset = queryset.annotate_favorites(
+                user_id=self.request.user.id
                 )
-            )
+            queryset = queryset.annotate(is_purchase=Exists(
+                OrderList.objects.filter(
+                    user=self.request.user, recipe_id=OuterRef('pk'))
+                    )
+                )
         return queryset
 
     def get_context_data(self):
@@ -92,7 +97,10 @@ class ProfileView(ListView):
         tags = self.request.GET.getlist('tag')
         author = get_object_or_404(User, username=self.kwargs.get('username'))
         queryset = author.recipes.all()
-        queryset = queryset.annotate_favorites(user_id=self.request.user.id)
+        if self.request.user.is_authenticated:
+            queryset = queryset.annotate_favorites(
+                user_id=self.request.user.id
+                )
         if tags:
             queryset = queryset.filter(tag__slug__in=tags).distinct()
         return queryset
@@ -101,8 +109,9 @@ class ProfileView(ListView):
         context = super().get_context_data(**kwargs)
         author = get_object_or_404(User, username=self.kwargs.get('username'))
         context['author'] = author
-        context['is_follow'] = Follow.objects.filter(
-            user=self.request.user, author=author).exists()
+        if self.request.user.is_authenticated:
+            context['is_follow'] = Follow.objects.filter(
+                user=self.request.user, author=author).exists()
         context['tags'] = Tag.objects.all()
         return context
 
@@ -121,11 +130,11 @@ class RecipeDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         author = self.object.author
         recipe = self.object
-        context['is_follow'] = Follow.objects.filter(
-            user=self.request.user, author=author).exists()
-        context['is_purchase'] = OrderList.objects.filter(
-            user=self.request.user, recipe=recipe).exists()
-        print('@@@@ context', context)
+        if self.request.user.is_authenticated:
+            context['is_follow'] = Follow.objects.filter(
+                user=self.request.user, author=author).exists()
+            context['is_purchase'] = OrderList.objects.filter(
+                user=self.request.user, recipe=recipe).exists()
         return context
 
 
@@ -137,15 +146,14 @@ class OrderListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = queryset.filter(order_list__user=self.request.user)
-        print('@@@@ ', queryset)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print('@@@ context', context)
         return context
 
 
+@login_required
 def dounload_purchases(request):
     recipes = Recipe.objects.filter(order_list__user=request.user)
     purchase_list = recipes.values_list(
@@ -159,9 +167,8 @@ def dounload_purchases(request):
 
     for ing in purchase_list:
         purchase_dict[ing[0]][1] += ing[2]
-    print('@@@@@ dict', purchase_dict)
 
-    response = HttpResponse(content_type='text/plain')  
+    response = HttpResponse(content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename="shop_list.txt"'
     writer = csv.writer(response)
     for ing in purchase_dict.values():
