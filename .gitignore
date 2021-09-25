@@ -135,7 +135,6 @@ dmypy.json
 */migrations/
 
 # Temporary static
-.orig_static/*
 .origin_static/*
 
 # Static
