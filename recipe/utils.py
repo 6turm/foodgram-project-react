@@ -25,7 +25,7 @@ def get_ingredients_from_recipe(recipe):
     ing_objects = recipe.ingredients.all()
     ingredients = {}
     for ing in ing_objects:
-        ingredients[ing.product.title] = [ing.amount, ing.product.title]
+        ingredients[ing.product.title] = [ing.amount, ing.product.dimension]
     return ingredients
 
 
