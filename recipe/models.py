@@ -26,7 +26,7 @@ class Product(models.Model):
     '''
     Доступные продукты (наименование, единицы измерения)
     '''
-    title = models.CharField( 
+    title = models.CharField(
         max_length=225, verbose_name='Название'
         )
     dimension = models.CharField(max_length=50, verbose_name='Ед. изм.')
