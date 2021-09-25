@@ -64,8 +64,6 @@ class Recipe(models.Model):
     image = models.ImageField(
         upload_to='recipe/',
         verbose_name='Картинка',
-        blank=True,
-        null=True
         )
     description = models.TextField(
         verbose_name='Описание'
