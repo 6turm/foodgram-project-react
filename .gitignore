@@ -138,7 +138,7 @@ dmypy.json
 orig_static/
 
 # Static
-static/
+static/*
 
 # Media
 media/*
