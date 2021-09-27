@@ -1,10 +1,12 @@
 from django.http.response import JsonResponse
-from rest_framework import serializers, status
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from recipe.models import Favorites, Follow, OrderList, Product, Recipe
-from .serializers import FavoritesSerializer, FollowSerializer, OrderListSerializer
+from recipe.models import Favorites, Follow, OrderList, Product
+
+from .serializers import (FavoritesSerializer, FollowSerializer,
+                          OrderListSerializer)
 
 
 class AddToFavorites(APIView):
@@ -53,7 +55,9 @@ class UnSubscribe(APIView):
 class GetProducts(APIView):
     def get(self, request, format=None):
         text = request.GET['query']
-        print('@@@@@@ query', text)
+        # Не понятно, зачем тут проверять данные.
+        # Должны возвращяться все соответсвия или ничего, если соответсвий нет.
+        # Если введено любое неверное значение, как раз ничего и не возвращяется.
         products = list(
             Product.objects.filter(title__icontains=text).values(
                 'title', 'dimension'

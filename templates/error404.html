@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>{{title}}</title>
+{% endblock %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
+
+{% block nav %}
+    {% include 'includes/nav.html'  %}
+{% endblock %}
+
+{% block main_header %}
+    <div class="main__header">
+        <h1 class="main__title">{{title}}</h1>
+    </div>
+{% endblock %}
+
+{% block content %}
+<p class="lead">Страница не найдена.</p>
+{% endblock %}

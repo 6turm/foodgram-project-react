@@ -57,6 +57,10 @@ class FavoritesView(LoginRequiredMixin, ListView):
         if tags:
             queryset = queryset.filter(tag__slug__in=tags).distinct()
         queryset = queryset.annotate_favorites(user_id=self.request.user.id)
+        queryset = queryset.annotate(is_purchase=Exists(
+            OrderList.objects.filter(
+                user=self.request.user, recipe_id=OuterRef('pk'))
+            ))
         return queryset
 
     def get_context_data(self):
@@ -80,7 +84,11 @@ class MyFollowView(LoginRequiredMixin, ListView):
         queryset = queryset.annotate(is_follow=Exists(
             Follow.objects.filter(
                 user=self.request.user, author_id=OuterRef('pk'))
-        ))
+            ))
+        queryset = queryset.annotate(is_purchase=Exists(
+            OrderList.objects.filter(
+                user=self.request.user, recipe_id=OuterRef('pk'))
+            ))
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -101,6 +109,10 @@ class ProfileView(ListView):
             queryset = queryset.annotate_favorites(
                 user_id=self.request.user.id
                 )
+            queryset = queryset.annotate(is_purchase=Exists(
+                OrderList.objects.filter(
+                    user=self.request.user, recipe_id=OuterRef('pk'))
+                ))
         if tags:
             queryset = queryset.filter(tag__slug__in=tags).distinct()
         return queryset
