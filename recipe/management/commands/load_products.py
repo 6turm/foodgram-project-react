@@ -1,8 +1,10 @@
-from django.core.management.base import BaseCommand
-from recipe.models import Product
 import csv
-from foodgram.settings import BASE_DIR
 import os
+
+from django.core.management.base import BaseCommand
+
+from foodgram.settings import BASE_DIR
+from recipe.models import Product
 
 CSV_FILE_PATH = os.path.join(BASE_DIR, 'staticfiles/ingredients.csv')
 
