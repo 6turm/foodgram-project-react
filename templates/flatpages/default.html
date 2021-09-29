@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    {{title}}
+    <title>{{ flatpage.title }}</title>
 {% endblock %}
 
 {% block static %}
@@ -14,10 +14,10 @@
 
 {% block main_header %}
     <div class="main__header">
-        <h1 class="main__title">{{title}}</h1>
+        <h1 class="main__title">{{ flatpage.title }}</h1>
     </div>
 {% endblock %}
 
 {% block content %}
-<p class="lead">Страница не найдена.</p>
+<p class="lead">{{ flatpage.content }}</p>
 {% endblock %}

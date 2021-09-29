@@ -2,7 +2,11 @@
 {% load template_filters %}
 
 {% block title %}
-    <title>Создание рецепта</title>
+    {% if 'edit' in request.path %}
+        Измененить рецепт
+    {% else %}
+        Создать рецепт
+    {% endif %}
 {% endblock %}
 
 {% block static %}
@@ -17,7 +21,13 @@
 
 {% block  main_header %}
     <div class="main__header">
-        <h1 class="main__title">Создать рецепт</h1>
+        <h1 class="main__title">
+            {% if 'edit' in request.path %}
+                Измененить рецепт
+            {% else %}
+                Создать рецепт
+            {% endif %}
+        </h1>
     </div>
 {% endblock %}
 

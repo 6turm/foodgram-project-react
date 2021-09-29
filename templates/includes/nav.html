@@ -3,6 +3,9 @@
         <div class="nav__container container">
             <ul class="nav__items list">
                 <li class="nav__item {% if active == 'index' %} nav__item_active {% endif %}"><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
+                <!-- переменная activ указывается в шаблоне в месте инклуда: 
+                    "include 'nav.html' with activ=..."
+                -->
                 {% if user.is_authenticated %}
                     <li class="nav__item {% if active == 'follow' %} nav__item_active {% endif %}"><a href="{% url 'myfollow' %}" class="nav__link link">Мои подписки</a></li>
                     <li class="nav__item {% if active == 'create' %} nav__item_active {% endif %}"><a href="{% url 'create_recipe' %}" class="nav__link link">Создать рецепт</a></li>
