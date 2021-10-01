@@ -132,7 +132,7 @@ dmypy.json
 .vscode/
 
 # Migratiosn
-*/migrations/
+# */migrations/
 
 # Temporary static
 .origin_static/*
