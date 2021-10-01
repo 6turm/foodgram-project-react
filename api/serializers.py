@@ -2,20 +2,20 @@ from django.contrib.auth import get_user_model
 
 from rest_framework import serializers
 
-from recipe.models import Favorites, Follow, OrderList, Recipe
+from recipe.models import Favorite, Follow, OrderList, Recipe
 
 User = get_user_model()
 
 
-class FavoritesSerializer(serializers.ModelSerializer):
+class FavoriteSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source='recipe_id')
 
     class Meta:
-        model = Favorites
+        model = Favorite
         fields = ('id',)
 
     def create(self, validated_data):
-        favorite = Favorites.objects.get_or_create(
+        favorite = Favorite.objects.get_or_create(
             user_id=validated_data['user_id'],
             recipe_id=validated_data['recipe_id']
             )

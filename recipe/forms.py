@@ -26,26 +26,25 @@ class RecipeForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.ingredients = kwargs.pop('ingredients', None)
-        super(RecipeForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     class Meta:
         model = Recipe
-        fields = ('title', 'tag', 'description', 'coocking_time', 'image')
+        fields = ('title', 'tags', 'description', 'coocking_time', 'image')
         widgets = {
-            'tag': forms.CheckboxSelectMultiple(),
+            'tags': forms.CheckboxSelectMultiple(),
             'image': CustomClearableFileInput(),
             'description': forms.Textarea(attrs={'rows': 8}),
             }
 
     def clean(self):
-        cleaned_data = super(RecipeForm, self).clean()
+        cleaned_data = super().clean()
         if len(self.ingredients) < 1:
             self.add_error('ingredients', 'Необходимо добавить ингридиенты!')
         else:
+            products = Product.objects.all().values_list('title', flat=True)
             for name in self.ingredients.keys():
-                if name not in Product.objects.all().values_list(
-                        'title', flat=True
-                        ):
+                if name not in products:
                     self.add_error(
                         'ingredients', f'Данного продукта нет в базе: {name}.'
                         )

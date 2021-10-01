@@ -22,10 +22,12 @@ def get_ingredients_from_request(request):
 
 def get_ingredients_from_recipe(recipe):
     '''Получаем ингридиенты из переданного рецепта в начале редактирования'''
-    ing_objects = recipe.ingredients.all()
+    ing_objects = recipe.ingredients.values_list(
+        'product__title', 'amount', 'product__dimension'
+        )
     ingredients = {}
     for ing in ing_objects:
-        ingredients[ing.product.title] = [ing.amount, ing.product.dimension]
+        ingredients[ing[0]] = [ing[1], ing[2]]
     return ingredients
 
 

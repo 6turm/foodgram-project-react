@@ -4,16 +4,16 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from recipe.models import Favorites, Follow, OrderList, Product
+from recipe.models import Favorite, Follow, OrderList, Product
 
-from .serializers import (FavoritesSerializer, FollowSerializer,
+from .serializers import (FavoriteSerializer, FollowSerializer,
                           OrderListSerializer)
 
 
 class AddToFavorites(APIView):
 
     def post(self, request, format=None):
-        serializer = FavoritesSerializer(data=request.data)
+        serializer = FavoriteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(user_id=request.user.id)
             response = Response(
@@ -28,7 +28,7 @@ class AddToFavorites(APIView):
 
 class RemoveFromFavorites(APIView):
     def delete(self, request, pk, format=None):
-        Favorites.objects.filter(user=request.user, recipe_id=pk).delete()
+        Favorite.objects.filter(user=request.user, recipe_id=pk).delete()
         return Response({'success': True}, status=status.HTTP_200_OK)
 
 

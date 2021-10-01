@@ -6,7 +6,7 @@
     <div class="card__body">
         <a class="card__title link" href="{% url 'recipe' username=recipe.author.username pk=recipe.pk %}">{{recipe.title}}</a>
         <ul class="card__items">
-            {% include 'includes/card_tags.html' with tags=recipe.tag.all %}
+            {% include 'includes/card_tags.html' with tags=recipe.tags.all %}
         </ul>
         <div class="card__items card__items_column">
             <p class="card__text"><span class="icon-time"></span> {{ recipe.coocking_time }} мин.</p>

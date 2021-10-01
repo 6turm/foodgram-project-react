@@ -49,19 +49,19 @@
                 <p class="form__label">Теги</p>
                 <div class="form__field-group">
                     <div class="tags">
-                        {% for tag in form.fields.tag.choices.queryset %}
+                        {% for tag in form.fields.tags.choices.queryset %}
                             <div class="tags__item">
                                 <input 
-                                    type="checkbox" name="{{ form.tag.html_name }}" id="id_{{ tag.slug }}" 
+                                    type="checkbox" name="{{ form.tags.html_name }}" id="id_{{ tag.slug }}" 
                                     class="tags__checkbox tags__checkbox_style_{{ tag.color }}"
                                     value="{{ tag.id }}" 
-                                    {% if tag.pk|stringformat:'s' in form.tag.value or tag in form.instance.tag.all %} checked {% endif %}
+                                    {% if tag.pk|stringformat:'s' in form.tags.value or tag in form.instance.tags.all %} checked {% endif %}
                                 >
                                 <label for="id_{{ tag.slug }}" class="tags__label">{{ tag.name }}</label>
                             </div>
                         {% endfor %}
                     </div>
-                    {% for error in form.tag.errors %}
+                    {% for error in form.tags.errors %}
                     <span class="form__error">{{ error }}</span>
                     {% endfor %}
                 </div>

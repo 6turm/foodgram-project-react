@@ -23,7 +23,7 @@ class IndexView(ListView):
         tags = self.request.GET.getlist('tag')
         queryset = super().get_queryset()
         if tags:
-            queryset = queryset.filter(tag__slug__in=tags).distinct()
+            queryset = queryset.filter(tags__slug__in=tags).distinct()
         if self.request.user.is_authenticated:
             queryset = queryset.annotate_favorites(
                 user_id=self.request.user.id
@@ -55,7 +55,7 @@ class FavoritesView(LoginRequiredMixin, ListView):
         queryset = super().get_queryset()
         queryset = queryset.filter(favorites__user=self.request.user)
         if tags:
-            queryset = queryset.filter(tag__slug__in=tags).distinct()
+            queryset = queryset.filter(tags__slug__in=tags).distinct()
         queryset = queryset.annotate_favorites(user_id=self.request.user.id)
         queryset = queryset.annotate(is_purchase=Exists(
             OrderList.objects.filter(
@@ -114,7 +114,7 @@ class ProfileView(ListView):
                     user=self.request.user, recipe_id=OuterRef('pk'))
                 ))
         if tags:
-            queryset = queryset.filter(tag__slug__in=tags).distinct()
+            queryset = queryset.filter(tags__slug__in=tags).distinct()
         return queryset
 
     def get_context_data(self, **kwargs):

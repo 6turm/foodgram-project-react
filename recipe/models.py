@@ -14,12 +14,12 @@ class Tag(models.Model):
         max_length=50, default='orange', verbose_name='Цвет'
         )
 
-    def __str__(self) -> str:
-        return f'{self.slug}'
-
     class Meta:
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+
+    def __str__(self) -> str:
+        return f'{self.slug}'
 
 
 class Product(models.Model):
@@ -31,18 +31,18 @@ class Product(models.Model):
         )
     dimension = models.CharField(max_length=50, verbose_name='Ед. изм.')
 
-    def __str__(self) -> str:
-        return f'{self.title}, {self.dimension}'
-
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+
+    def __str__(self) -> str:
+        return f'{self.title}, {self.dimension}'
 
 
 class RecipeQuerySet(models.QuerySet):
     def annotate_favorites(self, user_id):
         queryset = self.annotate(is_favorite=Exists(
-            Favorites.objects.filter(
+            Favorite.objects.filter(
                     user_id=user_id,
                     recipe_id=OuterRef('pk')
                     )
@@ -68,12 +68,12 @@ class Recipe(models.Model):
     description = models.TextField(
         verbose_name='Описание'
         )
-    consist = models.ManyToManyField(
+    consists = models.ManyToManyField(
         Product,
         through='Ingredient',
         verbose_name='Ингридиенты'
         )
-    tag = models.ManyToManyField(
+    tags = models.ManyToManyField(
         Tag,
         related_name='recipes',
         verbose_name='Теги'
@@ -87,13 +87,13 @@ class Recipe(models.Model):
         )
     objects = RecipeQuerySet.as_manager()
 
-    def __str__(self):
-        return f'{self.title}, от {self.author}'
-
     class Meta:
         ordering = ['-pub_date']
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
+
+    def __str__(self):
+        return f'{self.title}, от {self.author}'
 
 
 class Ingredient(models.Model):
@@ -112,7 +112,9 @@ class Ingredient(models.Model):
         verbose_name='Рецепт'
         )
     amount = models.FloatField(
-        validators=[MinValueValidator(0)],
+        validators=[
+            MinValueValidator(0, 'Количество не может быть отрицательным')
+            ],
         verbose_name='Количество'
         )
 
@@ -145,7 +147,7 @@ class Follow(models.Model):
         verbose_name_plural = 'Подписки'
 
 
-class Favorites(models.Model):
+class Favorite(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=CASCADE,
