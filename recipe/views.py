@@ -248,3 +248,4 @@ def delete_recipe(request, username, pk):
     if request.user == recipe.author:
         recipe.delete()
     return redirect('index')
+# test
