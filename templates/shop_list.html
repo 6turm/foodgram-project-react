@@ -22,7 +22,7 @@
     <div class="card-list card-list_column">
         <ul class="shopping-list">
             {% for recipe in object_list %}
-                {% include 'recipe/includes/purchase_item.html' %}
+                {% include 'includes/purchase_item.html' %}
             {% endfor %}
         </ul>
         <a href="{% url 'get_purchases' %}"><button class="button button_style_blue">Скачать список</button></a>

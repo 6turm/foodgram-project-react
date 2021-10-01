@@ -7,7 +7,7 @@
         <div class="single-card__header-info">
             <h1 class="single-card__title">{{ recipe.title }}</h1>
             <div class="single-card__favorite">
-                {% include 'recipe/includes/favorite_button.html' %}
+                {% include 'includes/favorite_button.html' %}
                 <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
             </div>
         </div>
@@ -33,8 +33,8 @@
             </ul>
         </div>
         <ul class="single-card__items">
-            <li class="single-card__item"> {% include 'recipe/includes/shopping_list_button.html' %} </li>
-            <li class="single-card__item"> {% include 'recipe/includes/follow_button_recipe.html' %} </li>
+            <li class="single-card__item"> {% include 'includes/shopping_list_button.html' %} </li>
+            <li class="single-card__item"> {% include 'includes/follow_button_recipe.html' %} </li>
         </ul>
         <div class="single-card__section">
             <h3 class="single-card__section-title">Ингридиенты:</h3>

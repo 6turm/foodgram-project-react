@@ -24,7 +24,7 @@
 {% block content %}
     <div class="card-list">
         {% for author in author_list %}
-            {% include 'recipe/includes/follow_item.html' with is_follow=author.is_follow %}
+            {% include 'includes/follow_item.html' with is_follow=author.is_follow %}
         {% endfor %}
     </div>
 {% endblock %}

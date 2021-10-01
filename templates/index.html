@@ -25,7 +25,7 @@
 {% block content %}
     <div class="card-list">
         {% for recipe in recipe_list %}
-            {% include 'recipe/includes/recipe_item.html' with recipe=recipe %}
+            {% include 'includes/recipe_item.html' with recipe=recipe %}
         {% endfor %}
     </div>
 {% endblock %}
