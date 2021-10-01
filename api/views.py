@@ -56,9 +56,11 @@ class UnSubscribe(APIView):
 class GetProducts(APIView):
     def get(self, request, format=None):
         text = request.GET['query']
-        # Не понятно, зачем тут проверять данные.
+        # Не понятно, как и зачем тут проверять данные.
         # Должны возвращяться все соответсвия или ничего, если соответсвий нет.
-        # Если введено любое неверное значение, как раз ничего и не возвращяется.
+        # Если введено любое неверное значение, как раз ничего
+        # и не возвращяется. Финальная проверка введенных данных
+        # выполняется в форме.
         products = list(
             Product.objects.filter(title__icontains=text).values(
                 'title', 'dimension'
