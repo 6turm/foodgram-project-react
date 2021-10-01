@@ -3,7 +3,7 @@
         <div class="nav__container container">
             <ul class="nav__items list">
                 <li class="nav__item {% if active == 'index' %} nav__item_active {% endif %}"><a href="{% url 'index' %}" class="nav__link link">Рецепты</a></li>
-                <!-- переменная activ указывается в шаблоне в месте инклуда: 
+                <!-- переменная activ указывается в шаблоне-родителе в месте инклуда: 
                     "include 'nav.html' with activ=..."
                 -->
                 {% if user.is_authenticated %}

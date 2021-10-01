@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    <title>Войти на сайт</title>
+    Войти на сайт
 {% endblock %}
 
 {% block static %}
@@ -19,7 +19,7 @@
 {% endblock %}
 
 {% block content %}
-    {% load user_filters %}
+    {% load template_filters %}
     <div class="form-container">
         <form method='post' action='' class="form">
             {% csrf_token %}

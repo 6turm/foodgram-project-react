@@ -37,12 +37,9 @@
         <form class="form" method="post" enctype="multipart/form-data" autocomplete="off">
             {% csrf_token %}
             <div class="form__group">
-                <label for="id_name" class="form__label">Название рецепта</label>
+                <label for="{{ form.title.id_for_label }}" class="form__label">{{ form.title.label }}</label>
                 <div class="form__field-group">
-                    <input 
-                        type="text" id="id_name" name="title" class="form__input" 
-                        value="{{ form.title.value|default_if_none:'' }}"
-                    >
+                    {{ form.title|addclass:'form__input' }}
                     {% for error in form.title.errors %}
                     <span class="form__error">{{ error }}</span>
                     {% endfor %}
@@ -55,12 +52,12 @@
                         {% for tag in form.fields.tag.choices.queryset %}
                             <div class="tags__item">
                                 <input 
-                                    type="checkbox" name="tag" id="id_{{tag.slug}}" 
-                                    class="tags__checkbox tags__checkbox_style_{{tag.color}}"
-                                    value="{{tag.id}}" 
+                                    type="checkbox" name="{{ form.tag.html_name }}" id="id_{{ tag.slug }}" 
+                                    class="tags__checkbox tags__checkbox_style_{{ tag.color }}"
+                                    value="{{ tag.id }}" 
                                     {% if tag.pk|stringformat:'s' in form.tag.value or tag in form.instance.tag.all %} checked {% endif %}
                                 >
-                                <label for="id_{{tag.slug}}" class="tags__label">{{ tag.name }}</label>
+                                <label for="id_{{ tag.slug }}" class="tags__label">{{ tag.name }}</label>
                             </div>
                         {% endfor %}
                     </div>
@@ -82,10 +79,10 @@
                     </div>
                     <div class="form__field-group-ingredientes-container">
                         {% for name, data in ingredients.items %}
-                            <div class="form__field-item-ingredient" id="ing_{{forloop.counter}}"><span> {{name}} — {{data.0}} {{data.1}}</span> <span class="form__field-item-delete"></span>
-                                <input id="nameIngredient_{{forloop.counter}}" name="nameIngredient_{{forloop.counter}}" type="hidden" value="{{name}}">
-                                <input id="valueIngredient_{{forloop.counter}}" name="valueIngredient_{{forloop.counter}}" type="hidden" value="{{data.0}}">
-                                <input id="unitsIngredient_{{forloop.counter}}" name="unitsIngredient_{{forloop.counter}}" type="hidden" value="{{data.1}}">
+                            <div class="form__field-item-ingredient" id="ing_{{ forloop.counter }}"><span> {{ name }} — {{ data.0 }} {{ data.1 }}</span> <span class="form__field-item-delete"></span>
+                                <input id="nameIngredient_{{ forloop.counter }}" name="nameIngredient_{{ forloop.counter }}" type="hidden" value="{{ name }}">
+                                <input id="valueIngredient_{{ forloop.counter }}" name="valueIngredient_{{ forloop.counter }}" type="hidden" value="{{ data.0 }}">
+                                <input id="unitsIngredient_{{ forloop.counter }}" name="unitsIngredient_{{ forloop.counter }}" type="hidden" value="{{ data.1 }}">
                             </div>
                         {% endfor %}
                     </div>
@@ -98,12 +95,10 @@
                 </div>
             </div>
             <div class="form__group">
-                <label for="id_time" class="form__label">Время приготовления</label>
+                <label for="{{ form.coocking_time.id_for_label }}" class="form__label">{{ form.coocking_time.label }}</label>
                 <div class="form__field-group form__field-group_time">
-                    <input 
-                        type="number" id="id_coocking_time" name="coocking_time" class="form__input" min="1" 
-                        value="{{ form.coocking_time.value|default_if_none:'' }}">
-                    <label for="id_time" class="form__label">минут</label>
+                        {{ form.coocking_time|addclass:'form__input' }}
+                    <label for="{{ form.coocking_time.id_for_label }}" class="form__label">минут</label>
                     <span class="form__error">
                         {% for error in form.coocking_time.errors %}
                             <span class="form__error">{{ error }}</span>
@@ -112,9 +107,9 @@
                 </div>
             </div>
             <div class="form__group">
-                <label for="id_description" class="form__label">Описание</label>
+                <label for="{{ form.description.id_for_label }}" class="form__label">{{ form.description.label }}</label>
                 <div class="form__field-group">
-                    <textarea name="description" id="id_description" rows="8" class="form__textarea" >{{ form.description.value|default_if_none:'' }}</textarea>
+                    {{ form.description|addclass:'form__textarea' }}
                     <span class="form__error">
                         {% for error in form.description.errors %}
                             <span class="form__error">{{ error }}</span>
@@ -132,9 +127,11 @@
             </div>
             {% if 'edit' in request.path %}
                 <div class="form__footer">
-                    <button class="button button_style_blue">Сохранить</button> <a style="margin-left: 2.5em"
+                    <button class="button button_style_blue"> Сохранить </button> 
+                    <a style="margin-left: 2.5em"
                         href="{% url 'delete_recipe' form.instance.author.username form.instance.id %}"
-                        class="form__ingredient-link">Удалить</a>
+                        class="form__ingredient-link"> Удалить
+                    </a>
                 </div>
                 {% else %}
                 <div class="form__footer">

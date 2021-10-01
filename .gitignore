@@ -143,3 +143,6 @@ static/*
 # Media
 media/*
 !media/recipe
+
+# Isort
+setup.cfg

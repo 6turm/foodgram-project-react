@@ -34,6 +34,7 @@ class RecipeForm(forms.ModelForm):
         widgets = {
             'tag': forms.CheckboxSelectMultiple(),
             'image': CustomClearableFileInput(),
+            'description': forms.Textarea(attrs={'rows': 8}),
             }
 
     def clean(self):
