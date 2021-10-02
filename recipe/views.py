@@ -38,6 +38,7 @@ class IndexView(ListView):
     def get_context_data(self):
         context = super().get_context_data()
         context['tags'] = Tag.objects.all()
+        print('@@@@ ', context)
         return context
 
 
