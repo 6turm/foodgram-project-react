@@ -1,0 +1,14 @@
+**
+
+!api/
+!foodgram/
+!recipe/
+!staticfiles/
+!templates/
+!user/
+!static/
+
+!manage.py
+!requirements.txt
+
+__pycache__/
