@@ -2,7 +2,6 @@ from django.core.management.base import BaseCommand
 
 from recipe.models import Tag
 
-
 TAGS = {
     'Завтрак': ['breakfast', 'orange'],
     'Обед': ['lunch', 'green'],

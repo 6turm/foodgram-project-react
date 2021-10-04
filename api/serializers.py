@@ -1,8 +1,7 @@
 from django.contrib.auth import get_user_model
-
 from rest_framework import serializers
 
-from recipe.models import Favorite, Follow, OrderList, Recipe
+from recipe.models import Favorite, Follow, OrderList, Product, Recipe
 
 User = get_user_model()
 
@@ -71,3 +70,18 @@ class OrderListSerializer(serializers.ModelSerializer):
                 f'There is no Recipe for this id: {id}'
                 )
         return id
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    query = serializers.CharField(source='title', allow_blank=True)
+
+    class Meta:
+        model = Product
+        fields = ('query',)
+
+    def validate_query(self, data):
+        if data.__contains__('query'):
+            raise serializers.ValidationError(
+                f'"query" param is required, recived: {data}'
+                )
+        return data

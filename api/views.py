@@ -1,5 +1,4 @@
 from django.http.response import JsonResponse
-
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -7,7 +6,7 @@ from rest_framework.views import APIView
 from recipe.models import Favorite, Follow, OrderList, Product
 
 from .serializers import (FavoriteSerializer, FollowSerializer,
-                          OrderListSerializer)
+                          OrderListSerializer, ProductSerializer)
 
 
 class AddToFavorites(APIView):
@@ -55,18 +54,20 @@ class UnSubscribe(APIView):
 
 class GetProducts(APIView):
     def get(self, request, format=None):
-        text = request.GET['query']
-        # Не понятно, как и зачем тут проверять данные.
-        # Должны возвращяться все соответсвия или ничего, если соответсвий нет.
-        # Если введено любое неверное значение, как раз ничего
-        # и не возвращяется. Финальная проверка введенных данных
-        # выполняется в форме.
-        products = list(
-            Product.objects.filter(title__icontains=text).values(
-                'title', 'dimension'
+        serializer = ProductSerializer(data=request.query_params)
+        if serializer.is_valid():
+            text = serializer.validated_data['title']
+            products = list(
+                Product.objects.filter(title__icontains=text).values(
+                    'title', 'dimension'
+                    )
                 )
-            )
-        return JsonResponse(products, safe=False)
+            response = JsonResponse(products, safe=False)
+        else:
+            response = Response(
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                )
+        return response
 
 
 class AddPurchase(APIView):
