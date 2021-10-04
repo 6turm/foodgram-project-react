@@ -14,13 +14,13 @@ api_patterns = [
         'subscribe/<int:pk>/',
         views.UnSubscribe.as_view(),
         name='unsubscribe'
-        ),
+    ),
     path('purchases/', views.AddPurchase.as_view(), name='add_purchase'),
     path(
         'purchases/<int:pk>/',
         views.RemovePurchase.as_view(),
         name='remove_purchase'
-        ),
+    ),
     path('products', views.GetProducts.as_view()),
 ]
 

@@ -16,7 +16,7 @@ def get_ingredients_from_request(request):
             ingredients[name] = [
                 post[f'valueIngredient_{num}'],
                 post[f'unitsIngredient_{num}'],
-                ]
+            ]
     return ingredients
 
 
@@ -24,7 +24,7 @@ def get_ingredients_from_recipe(recipe):
     '''Получаем ингридиенты из переданного рецепта в начале редактирования'''
     ing_objects = recipe.ingredients.values_list(
         'product__title', 'amount', 'product__dimension'
-        )
+    )
     ingredients = {}
     for ing in ing_objects:
         ingredients[ing[0]] = [ing[1], ing[2]]
@@ -45,7 +45,7 @@ def save_recipe(request, form, ingredients):
                 product=product,
                 recipe=recipe,
                 amount=Decimal(params[0].replace(',', '.'))
-                ))
+            ))
 
         Ingredient.objects.bulk_create(objs)
         form.save_m2m()

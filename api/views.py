@@ -17,11 +17,11 @@ class AddToFavorites(APIView):
             serializer.save(user_id=request.user.id)
             response = Response(
                 {'success': True}, status=status.HTTP_201_CREATED
-                )
+            )
         else:
             response = Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST
-                )
+            )
         return response
 
 
@@ -38,11 +38,11 @@ class Subscribe(APIView):
             serializer.save(user_id=request.user.id)
             response = Response(
                 {'success': True}, status=status.HTTP_201_CREATED
-                )
+            )
         else:
             response = Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST
-                )
+            )
         return response
 
 
@@ -60,13 +60,13 @@ class GetProducts(APIView):
             products = list(
                 Product.objects.filter(title__icontains=text).values(
                     'title', 'dimension'
-                    )
                 )
+            )
             response = JsonResponse(products, safe=False)
         else:
             response = Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST
-                )
+            )
         return response
 
 
@@ -77,11 +77,11 @@ class AddPurchase(APIView):
             serializer.save(user_id=request.user.id)
             response = Response(
                 {'success': True}, status=status.HTTP_201_CREATED
-                )
+            )
         else:
             response = Response(
                 serializer.errors, status=status.HTTP_400_BAD_REQUEST
-                )
+            )
         return response
 
 

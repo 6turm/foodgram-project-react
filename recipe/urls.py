@@ -12,17 +12,17 @@ urlpatterns = [
         'recipes/<str:username>/<int:pk>/',
         RecipeDetailView.as_view(),
         name='recipe'
-        ),
+    ),
     path(
         'recipes/<str:username>/<int:pk>/edit/',
         edit_recipe,
         name='edit_recipe'
-        ),
+    ),
     path(
         'recipes/<str:username>/<int:pk>/delete/',
         delete_recipe,
         name='delete_recipe'
-        ),
+    ),
     path('create/', create_recipe, name='create_recipe'),
     path('myfollow/', MyFollowView.as_view(), name='myfollow'),
     path('purchases/', OrderListView.as_view(), name='purchases'),

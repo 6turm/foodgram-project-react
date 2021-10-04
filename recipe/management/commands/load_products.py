@@ -18,4 +18,4 @@ class Command(BaseCommand):
                 title, dimension = row
                 Product.objects.get_or_create(
                     title=title, dimension=dimension
-                    )
+                )

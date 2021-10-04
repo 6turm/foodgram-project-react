@@ -27,12 +27,11 @@ class IndexView(ListView):
         if self.request.user.is_authenticated:
             queryset = queryset.annotate_favorites(
                 user_id=self.request.user.id
-                )
+            )
             queryset = queryset.annotate(is_purchase=Exists(
                 OrderList.objects.filter(
                     user=self.request.user, recipe_id=OuterRef('pk'))
-                    )
-                )
+            ))
         return queryset
 
     def get_context_data(self):
@@ -60,7 +59,7 @@ class FavoritesView(LoginRequiredMixin, ListView):
         queryset = queryset.annotate(is_purchase=Exists(
             OrderList.objects.filter(
                 user=self.request.user, recipe_id=OuterRef('pk'))
-            ))
+        ))
         return queryset
 
     def get_context_data(self):
@@ -84,11 +83,11 @@ class MyFollowView(LoginRequiredMixin, ListView):
         queryset = queryset.annotate(is_follow=Exists(
             Follow.objects.filter(
                 user=self.request.user, author_id=OuterRef('pk'))
-            ))
+        ))
         queryset = queryset.annotate(is_purchase=Exists(
             OrderList.objects.filter(
                 user=self.request.user, recipe_id=OuterRef('pk'))
-            ))
+        ))
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -108,11 +107,11 @@ class ProfileView(ListView):
         if self.request.user.is_authenticated:
             queryset = queryset.annotate_favorites(
                 user_id=self.request.user.id
-                )
+            )
             queryset = queryset.annotate(is_purchase=Exists(
                 OrderList.objects.filter(
                     user=self.request.user, recipe_id=OuterRef('pk'))
-                ))
+            ))
         if tags:
             queryset = queryset.filter(tags__slug__in=tags).distinct()
         return queryset
@@ -173,7 +172,7 @@ def dounload_purchases(request):
         'ingredients__product__title',
         'ingredients__amount',
         'ingredients__product__dimension'
-        )
+    )
 
     purchase_dict = {x[0]: [x[1], 0, x[3]] for x in purchase_list}
 
@@ -200,13 +199,13 @@ def create_recipe(request):
         request.POST or None,
         files=request.FILES or None,
         ingredients=ingredients
-        )
+    )
 
     if form.is_valid():
         recipe = save_recipe(request, form, ingredients)
         return redirect(
             'recipe', pk=recipe.id, username=recipe.author.username
-            )
+        )
 
     context = {'form': form, 'ingredients': ingredients}
     # ингридиенты передаются для повторного отображения в случае ошибок
@@ -227,14 +226,14 @@ def edit_recipe(request, username, pk):
     form = RecipeForm(
         request.POST or None, files=request.FILES or None,
         instance=recipe, ingredients=ingredients
-        )
+    )
 
     if form.is_valid():
         recipe.ingredients.all().delete()
         recipe = save_recipe(request, form, ingredients)
         return redirect(
             'recipe', pk=recipe.id, username=recipe.author.username
-            )
+        )
 
     context = {'form': form, 'ingredients': ingredients}
     # ингридиенты передаются для повторного отображения в случае ошибок

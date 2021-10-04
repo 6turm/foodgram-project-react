@@ -35,7 +35,7 @@ class RecipeForm(forms.ModelForm):
             'tags': forms.CheckboxSelectMultiple(),
             'image': CustomClearableFileInput(),
             'description': forms.Textarea(attrs={'rows': 8}),
-            }
+        }
 
     def clean(self):
         cleaned_data = super().clean()
@@ -47,5 +47,5 @@ class RecipeForm(forms.ModelForm):
                 if name not in products:
                     self.add_error(
                         'ingredients', f'Данного продукта нет в базе: {name}.'
-                        )
+                    )
         return cleaned_data
