@@ -5,3 +5,4 @@ python manage.py load_products
 python manage.py create_tags
 asdf
 asdf
+asdf
