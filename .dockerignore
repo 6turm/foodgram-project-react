@@ -11,6 +11,5 @@
 
 !manage.py
 !requirements.txt
-!.env
 
 __pycache__/
