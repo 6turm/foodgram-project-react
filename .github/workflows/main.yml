@@ -1,4 +1,4 @@
-name: YaMDB workflow
+name: Foodgram workflow
 
 on: 
   push:
@@ -44,36 +44,37 @@ jobs:
           tags: 6turm/foodgram:latest
 
 
-#   deploy:
-#     runs-on: ubuntu-latest
-#     needs: build_and_push_to_docker_hub
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: Copy file via ssh password
-#         uses: appleboy/scp-action@master
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USER }}
-#           key: ${{ secrets.SSH_KEY }}
-#           passphrase: ${{ secrets.PASSPHRASE }}
-#           source: "nginx/default.conf, ./docker-compose.yaml"
-#           target: "~/yamdb_final_code"
-#       - name: executing remote ssh commands to deploy
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USER }}
-#           key: ${{ secrets.SSH_KEY }}
-#           passphrase: ${{ secrets.PASSPHRASE }}
-#           script: |
-#             cd ~
-#             cd ./yamdb_final_code
-#             sudo docker-compose down
-#             sudo docker pull 6turm/yamdb_final:latest
-#             sudo docker-compose up -d
-  send_message:
+  deploy:
     runs-on: ubuntu-latest
     needs: push_to_dockerhub
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy file via ssh password
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          source: "nginx/default.conf, ./docker-compose.yaml"
+          target: "~/foodgram_code"
+      - name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: |
+            cd ~
+            cd ./foodgram_code
+            sudo docker-compose down
+            sudo docker pull 6turm/foodgram:latest
+            sudo docker-compose up -d
+
+  send_message:
+    runs-on: ubuntu-latest
+    needs: deploy
     steps:
     - name: send message
       uses: appleboy/telegram-action@master

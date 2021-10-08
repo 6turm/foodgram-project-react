@@ -7,6 +7,7 @@
 !templates/
 !user/
 !static/
+!docker-compose.yaml
 
 !manage.py
 !requirements.txt
