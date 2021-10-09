@@ -9,7 +9,6 @@ services:
   db:
     image: postgres:12.4
     restart: always
-    container_name: postgres
     env_file:
       - ./.env
     volumes:
