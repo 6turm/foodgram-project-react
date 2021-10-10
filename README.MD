@@ -3,7 +3,7 @@ http://178.154.193.194/
 
 Данные superuser:
 
-логин: admin
+логин: admin  
 пароль: admin
 
 
