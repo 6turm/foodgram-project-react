@@ -4,8 +4,8 @@ from django.contrib import admin
 from django.contrib.flatpages import views
 from django.urls import include, path
 
-# handler404 = "foodgram.views.page_not_found"
-# handler500 = "foodgram.views.server_error"
+handler404 = "foodgram.views.page_not_found"
+handler500 = "foodgram.views.server_error"
 
 
 urlpatterns = [
