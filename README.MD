@@ -1,8 +1,7 @@
 # Foodgram - продуктовый помощник
 http://178.154.193.194/
 
-Данные superuser:
-
+Данные superuser:  
 логин: admin  
 пароль: admin
 
