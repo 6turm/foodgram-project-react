@@ -100,3 +100,4 @@ sudo docker-compose run web python manage.py createsuperuser
 
 ## Бейдж GitHub Workflow
 ![main](https://github.com/6turm/foodgram-project-react/actions/workflows/main.yml/badge.svg)
+![main](https://github.com/6turm/foodgram-project-react/workflows/Foodgram%20workflow/badge.svg)
