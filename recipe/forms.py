@@ -49,8 +49,8 @@ class RecipeForm(forms.ModelForm):
                     self.add_error(
                         'ingredients', f'Данного продукта нет в базе: {name}.'
                     )
-            for amount in self.ingredients.values():
-                if amount[0] <= 0:
+            for value in self.ingredients.values():
+                if float(value[0].replace(',', '.')) <= 0:
                     self.add_error(
                         'ingredients',
                         'Количество ингредиентов должно быть положительным'
