@@ -41,6 +41,7 @@ class RecipeForm(forms.ModelForm):
         cleaned_data = super().clean()
         if len(self.ingredients) < 1:
             self.add_error('ingredients', 'Необходимо добавить ингридиенты!')
+
         else:
             products = Product.objects.all().values_list('title', flat=True)
             for name in self.ingredients.keys():
@@ -48,4 +49,11 @@ class RecipeForm(forms.ModelForm):
                     self.add_error(
                         'ingredients', f'Данного продукта нет в базе: {name}.'
                     )
+            for amount in self.ingredients.values():
+                if amount[0] <= 0:
+                    self.add_error(
+                        'ingredients',
+                        'Количество ингредиентов должно быть положительным'
+                    )
+
         return cleaned_data
